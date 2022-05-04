@@ -1,11 +1,12 @@
 package ru.geekbrains.postupaylo.homework4;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Homework4 {
     public static int SIZE = 4;
-    public static int DOTS_TO_WIN = 2;
+    public static int DOTS_TO_WIN = 4;
     public static final char DOT_EMPTY = '•';
     public static final char DOT_X = 'X';
     public static final char DOT_O = 'O';
@@ -42,64 +43,71 @@ public class Homework4 {
     }
 
     public static boolean checkWin(char symb) {
-        return checkRows(symb) || checkColumns(symb) || checkLeftDiagonal(symb) || checkRightDiagonal(symb);
+        return  getMatchesInRows(symb) == DOTS_TO_WIN
+                || getMatchesInColumns(symb)  == DOTS_TO_WIN
+                || getMatchesInLeftDiagonal(symb)  == DOTS_TO_WIN
+                || getMatchesInRightDiagonal(symb)  == DOTS_TO_WIN;
     }
 
-    private static boolean checkRows(char symb) {
+    private static int getMatchesInRows(char symb) {
+        int maxCountOfMatchesInRows = 0;
+
         for (int i = 0; i < map.length; i++) {
-            int countOfMatchForRow = 0;
+            String currentRow = Arrays.toString(map[i]);
+            int maxCountOfMatchesInRow = getCountOfSequenceSymbols(currentRow, symb);
+            maxCountOfMatchesInRows = Math.max(maxCountOfMatchesInRow, maxCountOfMatchesInRows);
+        }
+
+        return maxCountOfMatchesInRows;
+    }
+
+    private static int getMatchesInColumns(char symb) {
+        int maxCountOfMatchesInRows = 0;
+
+        for (int i = 0; i < map.length; i++) {
+            String currentColumn = "";
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] == symb)
-                    countOfMatchForRow += 1;
-                else
-                    break;
+                currentColumn += map[j][i];
             }
 
-            if (countOfMatchForRow == map.length)
-                return true;
+            int maxCountOfMatchesInRow = getCountOfSequenceSymbols(currentColumn, symb);
+            maxCountOfMatchesInRows = Math.max(maxCountOfMatchesInRow, maxCountOfMatchesInRows);
         }
-        return false;
+
+        return maxCountOfMatchesInRows;
     }
 
-    private static boolean checkColumns(char symb) {
+    private static int getMatchesInLeftDiagonal(char symb) {
+        String currentLeftDiagonal = "";
         for (int i = 0; i < map.length; i++) {
+            currentLeftDiagonal += map[i][i];
+        }
+        return getCountOfSequenceSymbols(currentLeftDiagonal, symb);
+    }
 
-            int countOfMatchForColumn = 0;
-            for (int j = 0; j < map[i].length; j++) {
-                if (map[j][i] == symb)
-                    countOfMatchForColumn += 1;
-                else
-                    break;
+    private static int getMatchesInRightDiagonal(char symb) {
+        String currentRightDiagonal = "";
+        for (int i = 0; i < map.length; i++) {
+            currentRightDiagonal += map[i][map.length - i - 1];
+        }
+
+        return getCountOfSequenceSymbols(currentRightDiagonal, symb);
+    }
+
+    private static int getCountOfSequenceSymbols(String row, char symb){
+        int count = 0;
+        int maxCountOfMatchesInRow = count;
+
+        for (int j = 0; j < row.length(); j++) {
+            if (row.charAt(j) == symb) {
+                count++;
+            } else {
+                count = 0;
             }
-
-            if (countOfMatchForColumn == map.length)
-                return true;
-        }
-        return false;
-    }
-
-    private static boolean checkLeftDiagonal(char symb) {
-        int countOfMatchForLeftDiagonal = 0;
-        for (int j = 0; j < map.length; j++) {
-            if (map[j][j] == symb)
-                countOfMatchForLeftDiagonal += 1;
+            maxCountOfMatchesInRow = Math.max(maxCountOfMatchesInRow, count);
         }
 
-        if (countOfMatchForLeftDiagonal == map.length)
-            return true;
-        return false;
-    }
-
-    private static boolean checkRightDiagonal(char symb) {
-        int countOfMatchForRightDiagonal = 0;
-        for (int j = 0; j < map.length; j++) {
-            if (map[j][map.length - j - 1] == symb
-                    && map[j + 1][map.length - j] == symb)
-                countOfMatchForRightDiagonal += 1;
-        }
-        if (countOfMatchForRightDiagonal == map.length)
-            return true;
-        return false;
+        return maxCountOfMatchesInRow;
     }
 
     public static boolean isMapFull() {
