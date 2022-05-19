@@ -1,4 +1,4 @@
-package ru.geekbrains.postupaylo.homework7;
+package ru.geekbrains.postupaylo.homework8;
 
 public class Plate {
     private int food;

@@ -1,4 +1,4 @@
-package ru.geekbrains.postupaylo.homework7;
+package ru.geekbrains.postupaylo.homework8;
 
 public class Cat {
     private String name;
@@ -8,9 +8,14 @@ public class Cat {
         this.name = name;
         this.appetite = appetite;
     }
-    public void eat(Plate p) {
+
+    public String getName(){
+        return this.name;
+    }
+
+    public void eat(Plate p) throws NotEnoughFoodException {
         if (p.gerRestOfFood() < appetite) {
-            System.out.println(String.format("It is not enough food for %s", this.name));
+            throw new NotEnoughFoodException(String.format("It is not enough food for %s", this.name));
         } else {
             p.decreaseFood(appetite);
             satiety = true;

@@ -1,4 +1,4 @@
-package ru.geekbrains.postupaylo.homework7;
+package ru.geekbrains.postupaylo.homework8;
 
 import java.util.Arrays;
 
@@ -19,7 +19,6 @@ public class Application {
         };
         Plate plate = new Plate(150);
         plate.info();
-        Arrays.stream(cats).forEach( it -> it.eat(plate) );
         plate.info();
         Arrays.stream(cats).forEach( it -> System.out.println(it.isCatFull()) );
     }
